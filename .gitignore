@@ -1,0 +1,42 @@
+# Reglas sin "/" inicial: aplican a todas las carpetas (template-*, etc.)
+
+# Dependencias
+node_modules/
+
+# Build y generados de Astro
+dist/
+.astro/
+
+# Artefactos de despliegue (zips para subir a Cloudflare, Wrangler)
+*.zip
+.wrangler/
+.dev.vars
+
+# Portfolios de personas particulares: contienen datos personales, no van en el repo de temas
+portfolio-*/
+
+# Variables de entorno (se versiona solo el ejemplo)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores: se mantienen las recomendaciones de extensiones y la config de depuración de VS Code
+.idea/
+**/.vscode/*
+!**/.vscode/extensions.json
+!**/.vscode/launch.json
+
+# Configuración local de Claude Code
+**/.claude/settings.local.json
