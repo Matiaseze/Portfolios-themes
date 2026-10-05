@@ -1,0 +1,62 @@
+---
+import { nav, site } from '../data/site';
+---
+
+<header data-navbar class="fixed inset-x-0 top-0 z-40 border-b border-ink/10 bg-paper/85 backdrop-blur-md transition-transform duration-500 ease-out-expo">
+	<div class="container-page flex h-16 items-center justify-between gap-8">
+		<a href="#inicio" class="text-lg font-semibold tracking-tighter uppercase">
+			{site.name}<sup class="ml-0.5 font-mono text-[9px] font-normal tracking-normal">®</sup>
+		</a>
+
+		<nav aria-label="Principal" class="hidden lg:block">
+			<ul class="flex items-center gap-8">
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href} class="label group flex items-baseline gap-1.5 transition-colors hover:text-ink">
+								<span class="text-muted">0{i + 1}</span>
+								<span class="relative">
+									{item.label}
+									<span class="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-ink transition-transform duration-500 ease-out-expo group-hover:origin-left group-hover:scale-x-100" />
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div class="flex items-center gap-6">
+			<span class="label hidden items-center gap-2 md:flex">
+				<span class="relative flex size-2">
+					<span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"></span>
+					<span class="relative inline-flex size-2 rounded-full bg-ink"></span>
+				</span>
+				{site.status}
+			</span>
+			<button data-menu-open type="button" aria-expanded="false" aria-controls="menu" class="label group flex items-center gap-3">
+				Menú
+				<span class="flex w-6 flex-col gap-1.5">
+					<span class="h-px w-full bg-ink transition-transform duration-300 group-hover:translate-x-1"></span>
+					<span class="h-px w-full bg-ink transition-transform duration-300 group-hover:-translate-x-1"></span>
+				</span>
+			</button>
+		</div>
+	</div>
+</header>
+
+<script>
+	import { ScrollTrigger } from '../scripts/motion';
+
+	const navbar = document.querySelector<HTMLElement>('[data-navbar]');
+
+	// Se esconde al bajar y reaparece al subir
+	if (navbar) {
+		ScrollTrigger.create({
+			start: 'top top-=120',
+			end: 'max',
+			onUpdate: (self) => navbar.classList.toggle('-translate-y-full', self.direction === 1),
+			onLeaveBack: () => navbar.classList.remove('-translate-y-full')
+		});
+	}
+</script>

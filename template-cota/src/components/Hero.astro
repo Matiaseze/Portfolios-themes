@@ -1,0 +1,40 @@
+---
+import Button from './ui/Button.astro';
+import { hero, site } from '../data/site';
+---
+
+<section id="inicio" class="relative z-10 flex min-h-svh flex-col pt-28 md:pt-36">
+	<div class="container-page flex flex-1 flex-col">
+		<div data-reveal-stagger class="label grid grid-cols-2 gap-y-2 text-muted md:grid-cols-4">
+			<span>Portfolio © {site.year}</span>
+			<span>{site.role}</span>
+			<span class="hidden md:block">{site.location}</span>
+			<span class="hidden text-right md:block">Scroll ↓</span>
+		</div>
+
+		<div class="mt-12 grid flex-1 gap-10 md:mt-20 lg:grid-cols-12">
+			<h1 data-split data-split-load class="heading-xl lg:col-span-9">
+				{hero.headline.map((line) => <span class="block">{line}</span>)}
+			</h1>
+
+			<div class="flex flex-col justify-end gap-8 lg:col-span-3 lg:pb-2">
+				<p data-blur data-blur-load class="max-w-sm text-base leading-relaxed text-ink/80">{hero.intro}</p>
+				<div data-reveal class="flex flex-wrap gap-x-8 gap-y-4">
+					<Button href="#proyectos" label="Ver proyectos" icon="down" />
+					<Button href="#contacto" label="Contacto" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-page mt-16 overflow-hidden">
+		<p
+			data-split="chars"
+			data-split-load
+			aria-label={site.name}
+			class="-mb-[0.12em] text-[30vw] leading-[0.8] font-semibold tracking-[-0.07em] uppercase md:text-[27vw]"
+		>
+			{site.name}
+		</p>
+	</div>
+</section>

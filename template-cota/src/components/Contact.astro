@@ -1,0 +1,68 @@
+---
+import SectionHeader from './ui/SectionHeader.astro';
+import Button from './ui/Button.astro';
+import { nav, site } from '../data/site';
+---
+
+<footer id="contacto" class="relative z-10 overflow-hidden bg-ink pt-24 text-paper md:pt-40">
+	<div class="container-page">
+		<SectionHeader index="06" label="Contacto" aside={site.status} tone="paper" />
+
+		<div class="mt-12 grid gap-12 md:mt-20 lg:grid-cols-12">
+			<h2 data-split class="heading-xl lg:col-span-9">
+				<span class="block">¿Tienes un proyecto</span>
+				<span class="block">o una vacante?</span>
+			</h2>
+			<div data-reveal class="flex flex-col justify-end gap-6 lg:col-span-3">
+				<p class="text-paper/70">Respondo en menos de 48 horas. Abierta a prácticas, proyectos de investigación y colaboraciones.</p>
+				<Button href={site.cv} label="Descargar CV" tone="paper" icon="down" />
+			</div>
+		</div>
+
+		<a
+			href={`mailto:${site.email}`}
+			data-reveal
+			class="group mt-16 flex items-center justify-between gap-6 border-y border-paper/20 py-8 md:mt-24 md:py-12"
+		>
+			<span class="text-3xl font-medium tracking-tighter transition-colors duration-300 group-hover:text-accent md:text-6xl lg:text-7xl">
+				{site.email}
+			</span>
+			<span class="grid size-14 shrink-0 place-items-center rounded-full bg-paper text-ink transition-all duration-500 ease-out-expo group-hover:rotate-45 group-hover:bg-accent md:size-20">
+				<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="size-5 md:size-6">
+					<path d="M4 12 12 4M5.5 4H12v6.5" />
+				</svg>
+			</span>
+		</a>
+
+		<div data-reveal-stagger class="label mt-16 grid grid-cols-2 gap-10 md:grid-cols-4">
+			<div class="flex flex-col gap-3">
+				<span class="text-paper/40">Navegación</span>
+				{nav.map((item) => <a href={item.href} class="w-fit transition-colors hover:text-accent">{item.label}</a>)}
+			</div>
+			<div class="flex flex-col gap-3">
+				<span class="text-paper/40">Redes</span>
+				{site.socials.map((s) => <a href={s.href} class="w-fit transition-colors hover:text-accent">{s.label}</a>)}
+			</div>
+			<div class="flex flex-col gap-3">
+				<span class="text-paper/40">Ubicación</span>
+				<span>{site.location}</span>
+				<span>Remoto o presencial</span>
+			</div>
+			<div class="flex flex-col items-start gap-3 md:items-end">
+				<span class="text-paper/40">Volver</span>
+				<a href="#inicio" class="transition-colors hover:text-accent">Arriba ↑</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-page mt-20 overflow-hidden">
+		<p data-split="chars" aria-label={site.fullName} class="-mb-[0.12em] text-[30vw] leading-[0.8] font-semibold tracking-[-0.07em] uppercase md:text-[27vw]">
+			{site.name}
+		</p>
+	</div>
+
+	<div class="container-page label flex flex-wrap justify-between gap-4 border-t border-paper/20 py-5 text-paper/50">
+		<span>© {site.year} {site.fullName}</span>
+		<span>Hecho con Astro, GSAP y Tailwind</span>
+	</div>
+</footer>

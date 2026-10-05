@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+@theme {
+	--color-paper: #e9e8e4;
+	--color-paper-dark: #dddcd6;
+	--color-ink: #151515;
+	--color-muted: #7c7b76;
+	--color-accent: #f4d35e;
+
+	--font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Space Mono", ui-monospace, monospace;
+
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+	html {
+		background: var(--color-paper);
+		color: var(--color-ink);
+	}
+
+	::selection {
+		background: var(--color-accent);
+		color: var(--color-ink);
+	}
+
+	[id] {
+		scroll-margin-top: 5rem;
+	}
+}
+
+@layer components {
+	.container-page {
+		@apply mx-auto w-full max-w-[1440px] px-4 md:px-8;
+	}
+
+	.label {
+		@apply font-mono text-[11px] tracking-widest uppercase md:text-xs;
+	}
+
+	.heading-xl {
+		@apply text-5xl leading-[0.9] font-medium tracking-tighter uppercase md:text-7xl xl:text-8xl;
+	}
+
+	/* Fondo de plano técnico para los placeholders de proyectos */
+	.blueprint {
+		background-color: var(--color-paper-dark);
+		background-image:
+			linear-gradient(to right, rgb(21 21 21 / 0.08) 1px, transparent 1px),
+			linear-gradient(to bottom, rgb(21 21 21 / 0.08) 1px, transparent 1px),
+			linear-gradient(to right, rgb(21 21 21 / 0.04) 1px, transparent 1px),
+			linear-gradient(to bottom, rgb(21 21 21 / 0.04) 1px, transparent 1px);
+		background-size:
+			80px 80px,
+			80px 80px,
+			16px 16px,
+			16px 16px;
+	}
+}
+
+/* Se ocultan antes de animar solo si hay JS y no se pide movimiento reducido (clase puesta en <head>) */
+.anim [data-split],
+.anim [data-blur],
+.anim [data-reveal],
+.anim [data-reveal-stagger] > * {
+	visibility: hidden;
+}

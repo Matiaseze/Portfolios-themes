@@ -1,0 +1,32 @@
+name: portfolio
+
+# Config común: todos los portfolios comparten la misma imagen
+x-portfolio: &portfolio
+  build: .
+  image: portfolio-dev
+  init: true
+  stdin_open: true
+  tty: true
+
+# Un servicio por portfolio. Para añadir uno nuevo, copia un bloque y cambia:
+# nombre del servicio, carpeta, puerto del host y volumen de node_modules.
+services:
+  cota:
+    <<: *portfolio
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./template-cota:/app
+      - cota_node_modules:/app/node_modules
+
+  # juan:
+  #   <<: *portfolio
+  #   ports:
+  #     - "4322:4321"
+  #   volumes:
+  #     - ./portfolio-juan:/app
+  #     - juan_node_modules:/app/node_modules
+
+volumes:
+  cota_node_modules:
+  # juan_node_modules:

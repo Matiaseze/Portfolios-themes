@@ -1,0 +1,92 @@
+---
+import { nav, site } from '../data/site';
+---
+
+<div
+	id="menu"
+	data-menu
+	role="dialog"
+	aria-modal="true"
+	aria-label="Menú"
+	class="invisible fixed inset-0 z-50 flex flex-col bg-ink text-paper"
+	style="clip-path: inset(0 0 100% 0)"
+>
+	<div class="container-page flex h-16 shrink-0 items-center justify-between">
+		<span class="text-lg font-semibold tracking-tighter uppercase">{site.name}</span>
+		<button data-menu-close type="button" class="label group flex items-center gap-3">
+			Cerrar
+			<span class="relative block size-5">
+				<span class="absolute top-1/2 left-0 h-px w-full rotate-45 bg-paper transition-transform duration-300 group-hover:rotate-135"></span>
+				<span class="absolute top-1/2 left-0 h-px w-full -rotate-45 bg-paper transition-transform duration-300 group-hover:rotate-45"></span>
+			</span>
+		</button>
+	</div>
+
+	<nav aria-label="Menú principal" class="container-page flex flex-1 flex-col justify-center">
+		<ul class="border-b border-paper/15">
+			{
+				nav.map((item, i) => (
+					<li class="border-t border-paper/15">
+						<a href={item.href} data-menu-link class="group flex items-baseline justify-between gap-6 py-3 md:py-4">
+							<span class="block overflow-hidden">
+								<span data-menu-item class="block text-5xl leading-none font-medium tracking-tighter uppercase transition-colors duration-300 group-hover:text-accent md:text-7xl lg:text-8xl">
+									{item.label}
+								</span>
+							</span>
+							<span class="label text-paper/50">0{i + 1}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<div data-menu-footer class="container-page label flex shrink-0 flex-wrap items-center justify-between gap-4 py-6 text-paper/60">
+		<a href={`mailto:${site.email}`} class="transition-colors hover:text-accent">{site.email}</a>
+		<ul class="flex gap-6">
+			{site.socials.map((s) => (
+				<li><a href={s.href} class="transition-colors hover:text-accent">{s.label}</a></li>
+			))}
+		</ul>
+	</div>
+</div>
+
+<script>
+	import { gsap, lenis, reducedMotion } from '../scripts/motion';
+
+	const menu = document.querySelector<HTMLElement>('[data-menu]')!;
+	const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]')!;
+	const closeBtn = menu.querySelector<HTMLButtonElement>('[data-menu-close]')!;
+	const items = menu.querySelectorAll('[data-menu-item]');
+	const footer = menu.querySelector('[data-menu-footer]');
+
+	const tl = gsap
+		.timeline({ paused: true, defaults: { ease: 'expo.inOut' } })
+		.set(menu, { visibility: 'visible' })
+		.to(menu, { clipPath: 'inset(0 0 0% 0)', duration: reducedMotion ? 0 : 0.9 })
+		.from(items, { yPercent: 110, duration: reducedMotion ? 0 : 1, stagger: 0.06, ease: 'expo.out' }, '-=0.35')
+		.from(footer, { autoAlpha: 0, y: 12, duration: reducedMotion ? 0 : 0.6, ease: 'power2.out' }, '<0.2');
+
+	let isOpen = false;
+
+	function setOpen(open: boolean) {
+		isOpen = open;
+		openBtn.setAttribute('aria-expanded', String(open));
+		if (open) {
+			lenis?.stop();
+			tl.timeScale(1).play();
+			closeBtn.focus();
+		} else {
+			lenis?.start();
+			tl.timeScale(1.6).reverse();
+			openBtn.focus();
+		}
+	}
+
+	openBtn.addEventListener('click', () => setOpen(true));
+	closeBtn.addEventListener('click', () => setOpen(false));
+	document.addEventListener('keydown', (e) => e.key === 'Escape' && isOpen && setOpen(false));
+
+	// El scroll al ancla lo gestiona animations.ts; aquí solo cerramos
+	menu.querySelectorAll('[data-menu-link]').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+</script>

@@ -1,0 +1,21 @@
+---
+interface Props {
+	index: string;
+	label: string;
+	aside?: string;
+	tone?: 'ink' | 'paper';
+}
+
+const { index, label, aside, tone = 'ink' } = Astro.props;
+---
+
+<div
+	data-reveal
+	class:list={[
+		'label flex items-center justify-between border-t pt-4',
+		tone === 'ink' ? 'border-ink/20 text-ink' : 'border-paper/20 text-paper'
+	]}
+>
+	<span><span class="text-muted">[{index}]</span> {label}</span>
+	{aside && <span class="text-muted">{aside}</span>}
+</div>

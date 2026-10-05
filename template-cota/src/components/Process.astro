@@ -1,0 +1,78 @@
+---
+import SectionHeader from './ui/SectionHeader.astro';
+import { process } from '../data/site';
+
+const total = String(process.length).padStart(2, '0');
+---
+
+<section id="proceso" class="relative z-10 py-24 md:py-40">
+	<div class="container-page">
+		<SectionHeader index="04" label="Proceso" aside="Método" />
+
+		<div class="mt-12 grid gap-16 md:mt-20 lg:grid-cols-12">
+			<div class="lg:col-span-5">
+				<div class="lg:sticky lg:top-28">
+					<h2 data-split class="heading-xl">Cómo trabajo</h2>
+					<div class="mt-12 hidden items-end gap-6 lg:flex">
+						<span class="block h-[0.8em] overflow-hidden text-[10rem] leading-[0.8] font-medium tracking-tighter">
+							<span data-process-counter class="block transition-transform duration-700 ease-out-expo">
+								{process.map((_, i) => <span class="block h-[0.8em]">{String(i + 1).padStart(2, '0')}</span>)}
+							</span>
+						</span>
+						<span class="label pb-2 text-muted">/ {total}</span>
+					</div>
+					<div class="mt-8 hidden h-px w-full bg-ink/15 lg:block">
+						<div data-process-progress class="h-full origin-left scale-x-0 bg-ink"></div>
+					</div>
+				</div>
+			</div>
+
+			<ol class="lg:col-span-6 lg:col-start-7">
+				{
+					process.map((step, i) => (
+						<li data-process-step class="flex flex-col gap-6 border-t border-ink/20 py-10 lg:min-h-[60vh] lg:py-14">
+							<span class="label text-muted">Paso {String(i + 1).padStart(2, '0')}</span>
+							<h3 data-split class="text-4xl font-medium tracking-tighter uppercase md:text-6xl">{step.title}</h3>
+							<p data-blur class="max-w-md text-lg leading-relaxed text-ink/75">{step.description}</p>
+							<ul data-reveal-stagger class="mt-2 flex flex-col">
+								{step.deliverables.map((d) => (
+									<li class="label flex items-center justify-between border-b border-dashed border-ink/20 py-3">
+										<span>{d}</span>
+										<span class="text-muted">✓</span>
+									</li>
+								))}
+							</ul>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { gsap, ScrollTrigger } from '../scripts/motion';
+
+	const counter = document.querySelector<HTMLElement>('[data-process-counter]');
+	const progress = document.querySelector<HTMLElement>('[data-process-progress]');
+	const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
+
+	if (counter && progress && steps.length) {
+		steps.forEach((step, i) => {
+			ScrollTrigger.create({
+				trigger: step,
+				start: 'top center',
+				end: 'bottom center',
+				onToggle: (self) => {
+					if (self.isActive) counter.style.transform = `translateY(-${i * 0.8}em)`;
+				}
+			});
+		});
+
+		gsap.to(progress, {
+			scaleX: 1,
+			ease: 'none',
+			scrollTrigger: { trigger: steps[0].parentElement, start: 'top center', end: 'bottom center', scrub: true }
+		});
+	}
+</script>

@@ -1,0 +1,90 @@
+---
+import SectionHeader from './ui/SectionHeader.astro';
+import { areas } from '../data/site';
+---
+
+<section id="areas" class="relative z-10 py-24 md:py-40">
+	<div class="container-page">
+		<SectionHeader index="02" label="Áreas" aside={`(0${areas.length})`} />
+
+		<div class="mt-12 grid gap-10 md:mt-20 lg:grid-cols-12">
+			<h2 data-split class="heading-xl lg:col-span-8">Lo que sé hacer</h2>
+			<p data-blur class="max-w-sm self-end text-ink/70 lg:col-span-4">
+				Cuatro áreas donde he acumulado práctica real. Abre cada una para ver herramientas y enfoque.
+			</p>
+		</div>
+
+		<ul data-accordion data-reveal class="mt-16 border-b border-ink/20 md:mt-24">
+			{
+				areas.map((area, i) => (
+					<li class="border-t border-ink/20" data-accordion-item>
+						<button
+							type="button"
+							id={`area-btn-${i}`}
+							aria-controls={`area-panel-${i}`}
+							aria-expanded={i === 0 ? 'true' : 'false'}
+							class="group grid w-full grid-cols-12 items-center gap-4 py-6 text-left md:py-8"
+						>
+							<span class="label col-span-2 text-muted md:col-span-1">0{i + 1}</span>
+							<span class="col-span-8 text-2xl font-medium tracking-tighter uppercase transition-transform duration-500 ease-out-expo group-hover:translate-x-3 md:col-span-10 md:text-5xl">
+								{area.title}
+							</span>
+							<span class="col-span-2 flex justify-end md:col-span-1">
+								<span class="grid size-10 place-items-center rounded-full border border-ink transition-colors duration-300 group-hover:bg-accent group-aria-expanded:bg-ink group-aria-expanded:text-paper">
+									<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4 transition-transform duration-500 ease-out-expo group-aria-expanded:rotate-45">
+										<path d="M8 3v10M3 8h10" />
+									</svg>
+								</span>
+							</span>
+						</button>
+						<div
+							id={`area-panel-${i}`}
+							role="region"
+							aria-labelledby={`area-btn-${i}`}
+							data-accordion-panel
+							class:list={['overflow-hidden', i !== 0 && 'h-0']}
+						>
+							<div class="grid grid-cols-12 gap-4 pb-10">
+								<p class="col-span-12 max-w-xl text-lg leading-relaxed text-ink/80 md:col-span-6 md:col-start-2">{area.description}</p>
+								<ul class="col-span-12 flex flex-wrap content-start gap-2 md:col-span-4 md:col-start-9">
+									{area.tools.map((tool) => (
+										<li class="label rounded-full border border-ink/30 px-3 py-1.5">{tool}</li>
+									))}
+								</ul>
+							</div>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<script>
+	import { gsap, ScrollTrigger, reducedMotion } from '../scripts/motion';
+
+	document.querySelectorAll<HTMLElement>('[data-accordion]').forEach((accordion) => {
+		const items = [...accordion.querySelectorAll<HTMLElement>('[data-accordion-item]')];
+		const duration = reducedMotion ? 0 : 0.7;
+
+		const toggle = (item: HTMLElement, open: boolean) => {
+			const button = item.querySelector('button')!;
+			const panel = item.querySelector<HTMLElement>('[data-accordion-panel]')!;
+			button.setAttribute('aria-expanded', String(open));
+			gsap.to(panel, {
+				height: open ? 'auto' : 0,
+				duration,
+				ease: 'expo.inOut',
+				onComplete: () => ScrollTrigger.refresh()
+			});
+		};
+
+		items.forEach((item) => {
+			item.querySelector('button')!.addEventListener('click', () => {
+				const willOpen = item.querySelector('button')!.getAttribute('aria-expanded') !== 'true';
+				items.forEach((other) => other !== item && toggle(other, false));
+				toggle(item, willOpen);
+			});
+		});
+	});
+</script>

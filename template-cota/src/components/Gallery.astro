@@ -1,0 +1,53 @@
+---
+import 'photoswipe/style.css';
+
+export interface GalleryItem {
+	src: string;
+	width: number;
+	height: number;
+	alt: string;
+	thumb?: string;
+}
+
+interface Props {
+	items: GalleryItem[];
+	class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={['pswp-gallery grid grid-cols-2 gap-4 md:grid-cols-3', className]} data-gallery>
+	{
+		items.map((item) => (
+			<a
+				href={item.src}
+				data-pswp-width={item.width}
+				data-pswp-height={item.height}
+				target="_blank"
+				class="block overflow-hidden rounded-lg"
+			>
+				<img
+					src={item.thumb ?? item.src}
+					alt={item.alt}
+					width={item.width}
+					height={item.height}
+					loading="lazy"
+					class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+				/>
+			</a>
+		))
+	}
+</div>
+
+<script>
+	import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+	document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+		new PhotoSwipeLightbox({
+			gallery,
+			children: 'a',
+			pswpModule: () => import('photoswipe')
+		}).init();
+	});
+</script>

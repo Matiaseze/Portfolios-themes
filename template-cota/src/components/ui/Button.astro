@@ -1,0 +1,34 @@
+---
+interface Props {
+	href: string;
+	label: string;
+	tone?: 'ink' | 'paper';
+	icon?: 'arrow' | 'down' | 'plus';
+	class?: string;
+}
+
+const { href, label, tone = 'ink', icon = 'arrow', class: className } = Astro.props;
+
+const circle = tone === 'ink' ? 'bg-ink text-paper' : 'bg-paper text-ink';
+const text = tone === 'ink' ? 'text-ink' : 'text-paper';
+const rotate = { arrow: 'group-hover:rotate-45', down: 'group-hover:translate-y-0.5', plus: 'group-hover:rotate-90' }[icon];
+---
+
+<a href={href} class:list={['group inline-flex items-center gap-3 text-sm font-medium tracking-widest uppercase', text, className]}>
+	<span
+		class:list={[
+			'grid size-10 shrink-0 place-items-center rounded-full transition-all duration-300 ease-out-expo group-hover:scale-110 group-hover:bg-accent group-hover:text-ink',
+			circle
+		]}
+	>
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class:list={['size-4 transition-transform duration-300', rotate]}>
+			{icon === 'arrow' && <path d="M4 12 12 4M5.5 4H12v6.5" />}
+			{icon === 'down' && <path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" />}
+			{icon === 'plus' && <path d="M8 3v10M3 8h10" />}
+		</svg>
+	</span>
+	<span class="relative">
+		{label}
+		<span class="absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 ease-out-expo group-hover:origin-left group-hover:scale-x-100"></span>
+	</span>
+</a>

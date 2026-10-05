@@ -1,0 +1,28 @@
+---
+import SectionHeader from './ui/SectionHeader.astro';
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../data/site';
+---
+
+<section id="proyectos" class="relative z-10 py-24 md:py-40">
+	<div class="container-page">
+		<SectionHeader index="03" label="Proyectos" aside={`(${String(projects.length).padStart(2, '0')})`} />
+
+		<div class="mt-12 grid gap-10 md:mt-20 lg:grid-cols-12">
+			<h2 data-split class="heading-xl lg:col-span-8">Proyectos seleccionados</h2>
+			<p data-blur class="max-w-sm self-end text-ink/70 lg:col-span-4">
+				Una selección de trabajos académicos, personales y en equipo. Cada uno empezó con una pregunta concreta.
+			</p>
+		</div>
+
+		<div class="mt-16 grid gap-x-8 gap-y-20 md:mt-24 md:grid-cols-2">
+			{
+				projects.map((project, i) => (
+					<div data-reveal class:list={[i % 2 === 1 && 'md:mt-32']}>
+						<ProjectCard index={i} {...project} />
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
